@@ -18,6 +18,22 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## React Bits
+
+React Bits is configured through the shadcn registry in `components.json`.
+
+Install more components with:
+
+```bash
+npx shadcn@latest add @react-bits/ComponentName-TS-TW
+```
+
+Example:
+
+```bash
+npx shadcn@latest add @react-bits/Aurora-TS-TW
+```
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More

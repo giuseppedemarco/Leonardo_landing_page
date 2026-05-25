@@ -33,18 +33,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 const services = [
   {
     icon: Ruler,
-    title: "Progettazione",
-    text: "Layout, dimensionamenti e revisioni tecniche con attenzione a vincoli, materiali e verifiche.",
+    title: "Aula studio",
+    text: "La sede di Leonardo mette a disposizione un’aula studio dotata di prese elettriche e servizi igienici.",
   },
   {
     icon: Cog,
-    title: "Meccanica",
-    text: "Soluzioni per parti, assiemi e processi dove precisione e manutenzione contano davvero.",
+    title: "Stampante 3d",
+    text: "La sede di Leonardo mette a disposizione la stampante 3d previa prenotazione e richiesta ai responsabili di sede.",
   },
   {
     icon: FileText,
-    title: "Documentazione",
-    text: "Relazioni, tavole e dossier strutturati per rendere ogni scelta tecnica leggibile.",
+    title: "Networking",
+    text: "La sede di Leonardo favorisce il networking tra studenti e professionisti, offrendo spazi pensati per incontrarsi, condividere idee e creare nuove opportunità di collaborazione.",
   },
 ];
 
@@ -104,19 +104,17 @@ export default function Home() {
     <main className="min-h-screen overflow-hidden">
       <SiteHeader />
       <HomeHero />
-      <GroupsSection />
       <section id="servizi" className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
         <div className="max-w-2xl">
           <Badge variant="outline" className="mb-4 bg-white">
             <BadgeCheck className="text-success" />
-            Sistema modulare
+            Regolarmente accreditata e iscritta nell'apposito Albo di Ateneo
           </Badge>
           <h2 className="text-3xl font-semibold sm:text-4xl">
-            Componenti solidi per raccontare lavoro tecnico.
+            La nostra sede
           </h2>
           <p className="mt-4 text-base leading-7 text-muted-foreground">
-            La UI usa primitive accessibili e componibili: bottoni, badge,
-            card, tab, accordion e menu mobile sono gia integrati.
+            Vieni a trovarci difronte il Cubo 7/11 
           </p>
         </div>
 
@@ -139,6 +137,8 @@ export default function Home() {
         </div>
       </section>
 
+      <GroupsSection />
+      
       <section id="eventi" className="bg-[#f1eee6]">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[0.85fr_1.15fr]">
           <div>
@@ -215,21 +215,7 @@ export default function Home() {
 
       <section id="contatti" className="border-t bg-brand-blue text-white">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-12 sm:px-8 md:flex-row md:items-center md:justify-between">
-          <div className="max-w-2xl">
-            <Badge className="mb-4 bg-white text-brand-blue">
-              <ClipboardList className="text-success" />
-              Prossimo step
-            </Badge>
-            <h2 className="text-3xl font-semibold">
-              Aggiungi testi finali, contatti e casi studio reali.
-            </h2>
-          </div>
-          <Button asChild variant="secondary" size="lg">
-            <a href="mailto:info@leonardo.example">
-              Scrivi a Leonardo
-              <ArrowRight className="size-4" />
-            </a>
-          </Button>
+     
         </div>
       </section>
     </main>

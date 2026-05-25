@@ -1,4 +1,7 @@
-import { ExternalLink, MessageCircle } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { ChevronDown, ExternalLink, MessageCircle } from "lucide-react";
 
 const groups = [
   {
@@ -228,7 +231,15 @@ const groups = [
   },
 ];
 
+const INITIAL_GROUPS_COUNT = 9;
+
 export function GroupsSection() {
+  const [showAllGroups, setShowAllGroups] = useState(false);
+  const visibleGroups = showAllGroups
+    ? groups
+    : groups.slice(0, INITIAL_GROUPS_COUNT);
+  const remainingGroups = Math.max(groups.length - INITIAL_GROUPS_COUNT, 0);
+
   return (
     <section id="gruppi" className="bg-brand-blue px-5 py-24 text-white sm:px-8">
       <div className="mx-auto max-w-7xl">
@@ -261,7 +272,7 @@ export function GroupsSection() {
         </p>
 
         <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {groups.map((group) => (
+          {visibleGroups.map((group) => (
             <a
               key={group.url}
               href={group.url}
@@ -284,6 +295,19 @@ export function GroupsSection() {
             </a>
           ))}
         </div>
+
+        {!showAllGroups && remainingGroups > 0 ? (
+          <div className="mt-8 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setShowAllGroups(true)}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-white/72 transition-colors hover:text-white"
+            >
+              Mostra i restanti {remainingGroups} gruppi
+              <ChevronDown className="size-4" />
+            </button>
+          </div>
+        ) : null}
       </div>
     </section>
   );

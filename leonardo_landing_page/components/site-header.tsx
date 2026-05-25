@@ -67,11 +67,17 @@ function MobileNav() {
 export function SiteHeader() {
   const shouldReduceMotion = useReducedMotion();
   const [heroHeight, setHeroHeight] = useState(navScrollFallback);
+  const [viewportWidth, setViewportWidth] = useState(1440);
   const { scrollY } = useScroll();
   const scrollEnd = heroHeight || navScrollFallback;
+  const startWidth = Math.max(viewportWidth - 32, 320);
+  const endWidth = Math.min(startWidth, 448);
 
-  const width = useTransform(scrollY, [0, scrollEnd], ["100%", "90%"]);
-  const maxWidth = useTransform(scrollY, [0, scrollEnd], ["1400px", "28rem"]);
+  const width = useTransform(
+    scrollY,
+    [0, scrollEnd],
+    [startWidth, endWidth],
+  );
   const padding = useTransform(
     scrollY,
     [0, scrollEnd],
@@ -103,7 +109,11 @@ export function SiteHeader() {
       "0 8px 32px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02)",
     ],
   );
-  const textColorProgress = useTransform(scrollY, [0, scrollEnd], [0, 1]);
+  const textColorProgress = useTransform(
+    scrollY,
+    [0, scrollEnd],
+    [0, 1],
+  );
   const textColor = useMotionTemplate`rgb(${useTransform(textColorProgress, [0, 1], [255, 22])} ${useTransform(textColorProgress, [0, 1], [255, 40])} ${useTransform(textColorProgress, [0, 1], [255, 75])})`;
 
   useEffect(() => {
@@ -113,6 +123,7 @@ export function SiteHeader() {
         document.getElementById("home");
 
       setHeroHeight(hero?.offsetHeight ?? window.innerHeight ?? navScrollFallback);
+      setViewportWidth(window.innerWidth);
     };
 
     updateHeroHeight();
@@ -133,8 +144,7 @@ export function SiteHeader() {
       }
       style={{
         x: "-50%",
-        width: shouldReduceMotion ? "90%" : width,
-        maxWidth: shouldReduceMotion ? "28rem" : maxWidth,
+        width: shouldReduceMotion ? endWidth : width,
         padding: shouldReduceMotion ? "0.8rem 1.5rem" : padding,
         borderRadius: "100px",
         backgroundColor: shouldReduceMotion

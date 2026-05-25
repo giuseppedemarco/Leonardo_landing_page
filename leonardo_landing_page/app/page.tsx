@@ -1,15 +1,15 @@
 import {
   ArrowRight,
   BadgeCheck,
-  BarChart3,
-  CheckCircle2,
-  ClipboardList,
   Cog,
+  ExternalLink,
   FileText,
+  MapPin,
   Ruler,
-  ShieldCheck,
 } from "lucide-react";
+import Image from "next/image";
 
+import CircularGallery from "@/components/CircularGallery";
 import { HomeHero } from "@/components/home-hero";
 import { GroupsSection } from "@/components/groups-section";
 import { SiteHeader } from "@/components/site-header";
@@ -20,15 +20,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const services = [
   {
@@ -48,54 +45,21 @@ const services = [
   },
 ];
 
-const projects = [
-  {
-    value: "studio",
-    label: "Studio",
-    title: "Dalla richiesta al quadro tecnico",
-    points: [
-      "Raccolta dei vincoli e definizione degli obiettivi.",
-      "Analisi delle alternative con criteri misurabili.",
-      "Sintesi chiara per decidere tempi, rischi e priorita.",
-    ],
-  },
-  {
-    value: "sviluppo",
-    label: "Sviluppo",
-    title: "Dal concept al prototipo",
-    points: [
-      "Modelli, schemi e componenti pensati per evolvere.",
-      "Verifiche progressive prima della fase finale.",
-      "Consegne snelle, versionate e facili da condividere.",
-    ],
-  },
-  {
-    value: "supporto",
-    label: "Supporto",
-    title: "Dal rilascio al miglioramento",
-    points: [
-      "Revisione tecnica su documenti e soluzioni esistenti.",
-      "Risoluzione di criticita con interventi mirati.",
-      "Allineamento continuo tra progetto, fornitori e team.",
-    ],
-  },
-];
-
 const faqs = [
   {
-    question: "Che tipo di progetti puo seguire Leonardo?",
+    question: "Entrare a far parte di Leonardo è gratuito?",
     answer:
-      "Progetti tecnici, meccanici e documentali: dalla prima analisi fino alla consegna di elaborati chiari e verificabili.",
+      "Sì. L’iscrizione all’associazione studentesca Leonardo è gratuita e aperta agli studenti interessati a partecipare alle attività, agli eventi e ai progetti promossi all’interno dell’UniCal.",
   },
   {
-    question: "La landing usa davvero shadcn/ui?",
+    question: "Che tipo di attività organizza Leonardo all’UniCal?",
     answer:
-      "Si. La struttura include componenti shadcn locali basati su Radix, varianti CVA, utility cn e tema CSS variables.",
+      "Leonardo organizza iniziative pensate per gli studenti, come eventi culturali, momenti di confronto, attività di orientamento, supporto alla vita universitaria e occasioni di socialità all’interno del campus.",
   },
   {
-    question: "E possibile aggiungere altri componenti?",
+    question: "Come posso entrare in contatto con l’associazione Leonardo?",
     answer:
-      "Si. La configurazione shadcn e gia presente, quindi si possono aggiungere altri elementi della libreria mantenendo lo stesso sistema.",
+      "Puoi contattare Leonardo tramite i suoi canali social, partecipare agli eventi organizzati in università oppure rivolgerti direttamente ai membri dell’associazione presenti nel campus UniCal.",
   },
 ];
 
@@ -108,7 +72,7 @@ export default function Home() {
         <div className="max-w-2xl">
           <Badge variant="outline" className="mb-4 bg-white">
             <BadgeCheck className="text-success" />
-            Regolarmente accreditata e iscritta nell'apposito Albo di Ateneo
+            Regolarmente accreditata e iscritta nell&apos;apposito Albo di Ateneo
           </Badge>
           <h2 className="text-3xl font-semibold sm:text-4xl">
             La nostra sede
@@ -140,64 +104,24 @@ export default function Home() {
       <GroupsSection />
       
       <section id="eventi" className="bg-[#f1eee6]">
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[0.85fr_1.15fr]">
-          <div>
-            <Badge variant="secondary" className="mb-4">
-              <BarChart3 className="text-brand-blue" />
-              Workflow
-            </Badge>
-            <h2 className="text-3xl font-semibold sm:text-4xl">
-              Uno spazio pronto per sezioni, contenuti e conversione.
-            </h2>
-            <p className="mt-4 leading-7 text-muted-foreground">
-              La pagina ora ha una base riutilizzabile: si puo espandere con
-              nuove sezioni senza cambiare linguaggio visivo.
-            </p>
+        <div className="w-full px-5 py-20 sm:px-8">
+          <div style={{ height: "620px", position: "relative" }}>
+            <CircularGallery
+              bend={1}
+              borderRadius={0.05}
+              scrollSpeed={2}
+              scrollEase={0.05}
+              textColor="#ffffff"
+            />
           </div>
-
-          <Tabs defaultValue="studio" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              {projects.map((project) => (
-                <TabsTrigger key={project.value} value={project.value}>
-                  {project.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            {projects.map((project) => (
-              <TabsContent key={project.value} value={project.value}>
-                <Card className="bg-white">
-                  <CardHeader>
-                    <CardTitle>{project.title}</CardTitle>
-                    <CardDescription>
-                      Struttura dimostrativa con Tabs shadcn/Radix.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid gap-3">
-                      {project.points.map((point) => (
-                        <div key={point} className="flex gap-3 text-sm">
-                          <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" />
-                          <span>{point}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            ))}
-          </Tabs>
         </div>
       </section>
 
       <section id="chisiamo" className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
-            <Badge variant="outline" className="mb-4 bg-white">
-              <ShieldCheck className="text-success" />
-              Domande
-            </Badge>
             <h2 className="text-3xl font-semibold sm:text-4xl">
-              Base shadcn pronta per continuare.
+              Scopri Leonardo
             </h2>
           </div>
           <Accordion type="single" collapsible className="w-full">
@@ -214,8 +138,90 @@ export default function Home() {
       </section>
 
       <section id="contatti" className="border-t bg-brand-blue text-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-12 sm:px-8 md:flex-row md:items-center md:justify-between">
-     
+        <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
+          <div className="flex flex-col gap-8 border-b border-white/12 pb-10 lg:flex-row lg:items-start lg:justify-between">
+            <div className="flex w-full justify-center lg:w-auto lg:justify-start">
+              <div className="flex items-center gap-4 px-5 py-5 text-center backdrop-blur-sm">
+                <div className="relative size-16 shrink-0">
+                  <Image
+                    src="/logo_leonardo.png"
+                    alt="Logo Leonardo"
+                    fill
+                    sizes="64px"
+                    className="object-contain"
+                  />
+                </div>
+                <div className="text-left">
+                  <p className="text-3xl font-extrabold italic leading-none text-white sm:text-4xl">
+                    LEONARDO
+                  </p>
+                  <p className="mt-2 text-sm text-white/70 sm:text-base">
+                    Fierce as a Lion
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mx-auto w-full max-w-md text-left">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/55">
+                Contatti
+              </p>
+              <div className="mt-4 flex flex-col items-start gap-3 text-sm text-white/72">
+                <a
+                  href="https://www.instagram.com/leonardo.unical/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 transition-colors hover:text-white"
+                >
+                  <ExternalLink className="size-4" />
+                  Instagram Leonardo
+                </a>
+                <a
+                  href="#gruppi"
+                  className="inline-flex items-center gap-2 transition-colors hover:text-white"
+                >
+                  <ArrowRight className="size-4" />
+                  Gruppi WhatsApp matricole
+                </a>
+                <p className="inline-flex items-center gap-2">
+                  <MapPin className="size-4" />
+                  UniCal, di fronte al Cubo 7/11
+                </p>
+              </div>
+            </div>
+
+            <div className="w-full text-left lg:w-auto">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/55">
+                Navigazione
+              </p>
+              <div className="mt-4 flex flex-col gap-3 text-sm text-white/72">
+                <a href="#home" className="transition-colors hover:text-white">
+                  Home
+                </a>
+                <a
+                  href="/presentazione"
+                  className="transition-colors hover:text-white"
+                >
+                  Scopri Leonardo
+                </a>
+                <a href="#chisiamo" className="transition-colors hover:text-white">
+                  Chi siamo
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <p className="pt-6 text-center text-sm text-white/55">
+            Created By{" "}
+            <a
+              href="https://www.instagram.com/giuseppedemarcoo/"
+              target="_blank"
+              rel="noreferrer"
+              className="transition-colors hover:text-white"
+            >
+              @giuseppedemarcoo
+            </a>
+          </p>
         </div>
       </section>
     </main>

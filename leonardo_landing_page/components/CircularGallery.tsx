@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import Image from "next/image";
 
 type GalleryItem = {
@@ -78,15 +78,25 @@ export default function CircularGallery({
       return;
     }
 
-    const cardWidth = 340;
-    const cardGap = 32;
-    const sidePadding = 48;
-    const cardSpan = cardWidth + cardGap;
-    const cycleWidth = items.length * cardSpan;
+    const getLayout = () => {
+      const trackWidth = track.clientWidth || window.innerWidth;
+      const isCompact = trackWidth < 640;
+      const cardWidth = isCompact
+        ? Math.min(340, Math.max(260, trackWidth * 0.78))
+        : 340;
+      const cardGap = isCompact ? 16 : 32;
+      const sidePadding = isCompact
+        ? Math.max((trackWidth - cardWidth) / 2, 16)
+        : 48;
+      const cardSpan = cardWidth + cardGap;
+      const cycleWidth = items.length * cardSpan;
 
-    currentOffsetRef.current = cycleWidth;
+      return { cardGap, cardWidth, cycleWidth, sidePadding };
+    };
 
-    const normalizeOffset = (value: number) => {
+    currentOffsetRef.current = getLayout().cycleWidth;
+
+    const normalizeOffset = (value: number, cycleWidth: number) => {
       let normalized = value;
 
       while (normalized < cycleWidth) {
@@ -105,9 +115,19 @@ export default function CircularGallery({
         return;
       }
 
-      currentOffsetRef.current = normalizeOffset(currentOffsetRef.current);
+      const layout = getLayout();
+
+      track.style.setProperty(
+        "--gallery-card-width",
+        `${layout.cardWidth}px`,
+      );
+      stripRef.current.style.gap = `${layout.cardGap}px`;
+      currentOffsetRef.current = normalizeOffset(
+        currentOffsetRef.current,
+        layout.cycleWidth,
+      );
       stripRef.current.style.transform = `translate3d(${
-        -currentOffsetRef.current + sidePadding
+        -currentOffsetRef.current + layout.sidePadding
       }px, 0px, 0px)`;
     };
 
@@ -168,8 +188,8 @@ export default function CircularGallery({
 
   return (
     <div className="relative h-full overflow-hidden bg-[#f1eee6]">
-      <div className="absolute left-1/2 top-8 z-10 flex -translate-x-1/2 items-center justify-center gap-3 rounded-full border border-[#d8d1c2] bg-white/70 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#16284b] shadow-sm backdrop-blur">
-        <div className="relative size-7 shrink-0">
+      <div className="absolute left-1/2 top-5 z-10 flex max-w-[calc(100%-2rem)] -translate-x-1/2 items-center justify-center gap-2 rounded-full border border-[#d8d1c2] bg-white/70 px-3 py-2 text-center text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-[#16284b] shadow-sm backdrop-blur sm:top-8 sm:gap-3 sm:text-xs sm:tracking-[0.18em]">
+        <div className="relative size-6 shrink-0 sm:size-7">
           <Image
             src="/logo_leonardo.png"
             alt=""
@@ -185,15 +205,20 @@ export default function CircularGallery({
         <div
           ref={trackRef}
           className="relative h-full w-full cursor-grab overflow-hidden active:cursor-grabbing"
+          style={
+            {
+              "--gallery-card-width": "min(78vw, 340px)",
+            } as CSSProperties
+          }
         >
           <div
             ref={stripRef}
-            className="absolute left-12 top-1/2 flex h-[380px] -translate-y-1/2 gap-8 will-change-transform"
+            className="absolute left-0 top-1/2 flex h-[330px] -translate-y-1/2 gap-4 will-change-transform sm:h-[380px] sm:gap-8"
           >
             {repeatedItems.map((item, index) => (
               <article
                 key={`${item.title}-${index}`}
-                className="relative flex h-[350px] w-[340px] shrink-0 flex-col justify-end overflow-hidden bg-[#16284b] shadow-[0_16px_32px_rgba(22,40,75,0.14)]"
+                className="relative flex h-[310px] w-[var(--gallery-card-width)] shrink-0 flex-col justify-end overflow-hidden bg-[#16284b] shadow-[0_16px_32px_rgba(22,40,75,0.14)] sm:h-[350px]"
                 style={{
                   borderRadius: `${borderRadius * 100}%`,
                   color: textColor,
@@ -204,21 +229,21 @@ export default function CircularGallery({
                     src={item.image}
                     alt={item.title}
                     fill
-                    sizes="340px"
+                    sizes="(max-width: 640px) 78vw, 340px"
                     className="object-cover"
                     draggable={false}
                   />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#16284b]/88 via-[#16284b]/38 to-transparent" />
-                <div className="relative z-10 p-6">
-                  <p className="inline-block bg-[#2d8a71]/42 px-2 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/75">
+                <div className="relative z-10 p-5 sm:p-6">
+                  <p className="inline-block bg-[#2d8a71]/42 px-2 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-white/75 sm:text-xs sm:tracking-[0.18em]">
                     {item.eyebrow}
                   </p>
-                  <h3 className="mt-4 text-2xl font-extrabold italic leading-tight">
+                  <h3 className="mt-3 text-xl font-extrabold italic leading-tight sm:mt-4 sm:text-2xl">
                     {item.title}
                   </h3>
 
-                  <p className="mt-4 max-w-[15rem] text-sm leading-7 text-white/82">
+                  <p className="mt-3 max-w-[15rem] text-sm leading-6 text-white/82 sm:mt-4 sm:leading-7">
                     {item.text}
                   </p>
                 </div>
@@ -228,7 +253,7 @@ export default function CircularGallery({
         </div>
       </div>
 
-      <p className="absolute bottom-7 left-1/2 z-10 -translate-x-1/2 text-sm font-medium text-[#16284b]/65">
+      <p className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 text-sm font-medium text-[#16284b]/65 sm:bottom-7">
         Trascina per esplorare
       </p>
     </div>

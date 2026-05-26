@@ -241,14 +241,14 @@ export function GroupsSection() {
   const remainingGroups = Math.max(groups.length - INITIAL_GROUPS_COUNT, 0);
 
   return (
-    <section id="gruppi" className="bg-brand-blue px-5 py-24 text-white sm:px-8">
+    <section id="gruppi" className="bg-brand-blue px-5 py-16 text-white sm:px-8 sm:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/60">
               Gruppi matricole
             </p>
-            <h2 className="mt-3 text-3xl font-extrabold italic leading-tight sm:text-5xl">
+            <h2 className="mt-3 text-2xl font-extrabold italic leading-tight sm:text-5xl">
               Sei una Matricola? Entra nei gruppi whatsapp del tuo corso di laurea!
             </h2>
             <p className="mt-4 text-base leading-7 text-white/70">
@@ -260,25 +260,25 @@ export function GroupsSection() {
             href="https://linktr.ee/associazione.rdu_leonardo#545650720"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-white/25 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/25 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-white/10 sm:w-fit"
           >
             Fonte Linktree di Leonardo
             <ExternalLink className="size-4" />
           </a>
         </div>
 
-        <p className="mt-8 w-fit rounded-full bg-white/10 px-3 py-1 text-sm text-white/70">
+        <p className="mt-7 w-fit rounded-full bg-white/10 px-3 py-1 text-sm text-white/70 sm:mt-8">
           {groups.length} gruppi disponibili
         </p>
 
-        <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-3 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
           {visibleGroups.map((group) => (
             <a
               key={group.url}
               href={group.url}
               target="_blank"
               rel="noreferrer"
-              className="group flex min-h-28 flex-col justify-between rounded-lg border border-white/10 bg-white/[0.06] p-4 text-white transition-colors hover:border-white/30 hover:bg-white/12"
+              className="group flex min-h-24 flex-col justify-between rounded-lg border border-white/10 bg-white/[0.06] p-4 text-white transition-colors hover:border-white/30 hover:bg-white/12 sm:min-h-28"
             >
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.12em] text-white/45">
@@ -301,7 +301,7 @@ export function GroupsSection() {
             <button
               type="button"
               onClick={() => setShowAllGroups(true)}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-white/72 transition-colors hover:text-white"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-3 text-sm font-semibold text-white/72 transition-colors hover:text-white sm:w-auto sm:border-0 sm:px-0 sm:py-0"
             >
               Mostra i restanti {remainingGroups} gruppi
               <ChevronDown className="size-4" />

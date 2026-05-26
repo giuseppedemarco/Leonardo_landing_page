@@ -43,7 +43,7 @@ function MobileNav() {
           <Menu className="size-4" />
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="w-[calc(100vw-2rem)] max-w-xs">
         <SheetHeader>
           <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
@@ -52,7 +52,7 @@ function MobileNav() {
             <SheetClose asChild key={item.href}>
               <a
                 href={item.href}
-                className="rounded-md px-2 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                className="rounded-md px-3 py-3 text-base font-medium text-foreground transition-colors hover:bg-muted"
               >
                 {item.label}
               </a>
@@ -67,11 +67,20 @@ function MobileNav() {
 export function SiteHeader() {
   const shouldReduceMotion = useReducedMotion();
   const [heroHeight, setHeroHeight] = useState(navScrollFallback);
-  const [viewportWidth, setViewportWidth] = useState(1440);
+  const [viewportWidth, setViewportWidth] = useState(390);
   const { scrollY } = useScroll();
   const scrollEnd = heroHeight || navScrollFallback;
-  const startWidth = Math.max(viewportWidth - 32, 320);
-  const endWidth = Math.min(startWidth, 448);
+  const isMobileViewport = viewportWidth < 768;
+  const startWidth = isMobileViewport
+    ? Math.max(viewportWidth - 40, 272)
+    : Math.max(viewportWidth - 32, 320);
+  const endWidth = isMobileViewport ? startWidth : Math.min(startWidth, 448);
+  const startPadding = isMobileViewport
+    ? "0.55rem 0.65rem 0.55rem 0.9rem"
+    : "1.5rem 2rem";
+  const endPadding = isMobileViewport
+    ? "0.55rem 0.65rem 0.55rem 0.9rem"
+    : "0.8rem 1.5rem";
 
   const width = useTransform(
     scrollY,
@@ -81,7 +90,7 @@ export function SiteHeader() {
   const padding = useTransform(
     scrollY,
     [0, scrollEnd],
-    ["1.5rem 2rem", "0.8rem 1.5rem"],
+    [startPadding, endPadding],
   );
   const backgroundColor = useTransform(
     scrollY,
@@ -134,8 +143,8 @@ export function SiteHeader() {
 
   return (
     <motion.header
-      className="site-header fixed left-1/2 top-4 z-50 flex items-center justify-end md:justify-center"
-      initial={shouldReduceMotion ? false : { opacity: 0, y: -18, scale: 0.96 }}
+      className="site-header fixed left-1/2 top-3 z-50 flex items-center justify-between sm:top-4 md:justify-center"
+      initial={false}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={
         shouldReduceMotion
@@ -145,7 +154,7 @@ export function SiteHeader() {
       style={{
         x: "-50%",
         width: shouldReduceMotion ? endWidth : width,
-        padding: shouldReduceMotion ? "0.8rem 1.5rem" : padding,
+        padding: shouldReduceMotion ? endPadding : padding,
         borderRadius: "100px",
         backgroundColor: shouldReduceMotion
           ? "rgba(255, 255, 255, 0.92)"
@@ -163,6 +172,13 @@ export function SiteHeader() {
         color: shouldReduceMotion ? "var(--brand-blue)" : textColor,
       }}
     >
+      <a
+        href="#home"
+        className="text-sm font-extrabold italic leading-none md:hidden"
+        aria-label="Torna alla home"
+      >
+        LEONARDO
+      </a>
       <nav
         className="hidden items-center gap-1 text-sm font-semibold md:flex"
         aria-label="Navigazione principale"

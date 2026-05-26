@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
@@ -14,6 +14,10 @@ const storySlides = [
   "Il campus sorge ad Arcavacata di Rende, tra le colline vicino Cosenza.",
   "UniCal descrive il suo campus come il pi\u00f9 grande e attrezzato d\u2019Italia: residenze, biblioteche, sport, cinema, teatri e spazi di socialit\u00e0 in un\u2019unica citt\u00e0 universitaria.",
 ];
+
+type StoryStyle = CSSProperties & {
+  "--story-delay"?: string;
+};
 
 function BlueWave({
   onComplete,
@@ -45,20 +49,20 @@ function BlueWave({
 export function PresentationStory() {
   const router = useRouter();
   const shouldReduceMotion = useReducedMotion();
-  const [currentSlide, setCurrentSlide] = useState(-1);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [hasStoryStarted, setHasStoryStarted] = useState(false);
   const [isReturningHome, setIsReturningHome] = useState(false);
 
   useEffect(() => {
-    const timeout = window.setTimeout(
-      () => setCurrentSlide(0),
-      shouldReduceMotion ? 0 : 180,
-    );
+    const frame = window.requestAnimationFrame(() => {
+      setHasStoryStarted(true);
+    });
 
-    return () => window.clearTimeout(timeout);
-  }, [shouldReduceMotion]);
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   const advanceStory = () => {
-    if (isReturningHome || currentSlide < 0) return;
+    if (isReturningHome) return;
 
     if (currentSlide < storySlides.length - 1) {
       setCurrentSlide((current) => current + 1);
@@ -70,7 +74,9 @@ export function PresentationStory() {
 
   return (
     <main
-      className="min-h-[100svh] cursor-pointer bg-white px-5 py-16 text-brand-blue sm:px-8"
+      className={`story-stage relative min-h-[100svh] cursor-pointer overflow-hidden bg-white px-5 py-8 text-brand-blue sm:px-8 sm:py-16 ${
+        hasStoryStarted ? "story-stage-ready" : ""
+      }`}
       role="button"
       tabIndex={0}
       onClick={advanceStory}
@@ -81,33 +87,61 @@ export function PresentationStory() {
         }
       }}
     >
-      <div className="mx-auto flex min-h-[calc(100svh-8rem)] w-full max-w-4xl flex-col items-center justify-center text-center">
+      <div
+        className="story-enter pointer-events-none absolute inset-x-5 top-7 flex items-center justify-center text-center sm:top-10"
+        style={{ "--story-delay": "80ms" } as StoryStyle}
+      >
+        <div>
+          <p className="text-lg font-extrabold italic leading-none sm:text-2xl">
+            LEONARDO
+          </p>
+          <p className="mt-2 text-xs font-medium text-brand-blue/55">
+            Scopri Leonardo
+          </p>
+        </div>
+      </div>
+
+      <div className="mx-auto flex min-h-[100svh] w-full max-w-4xl flex-col items-center justify-center pb-24 pt-24 text-center sm:min-h-[calc(100svh-8rem)] sm:pb-12 sm:pt-12">
         <AnimatePresence mode="wait">
-          {currentSlide >= 0 && (
-            <motion.p
-              key={storySlides[currentSlide]}
-              className="max-w-3xl text-xl font-medium leading-snug tracking-normal sm:text-2xl md:text-3xl"
-              initial={
-                shouldReduceMotion
-                  ? false
-                  : { opacity: 0, y: 18, filter: "blur(10px)" }
-              }
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={
-                shouldReduceMotion
-                  ? { opacity: 0 }
-                  : { opacity: 0, y: -12, filter: "blur(8px)" }
-              }
-              transition={
-                shouldReduceMotion
-                  ? { duration: 0 }
-                  : { duration: 0.45, ease: entranceEase }
-              }
-            >
-              {storySlides[currentSlide]}
-            </motion.p>
-          )}
+          <motion.p
+            key={storySlides[currentSlide]}
+            className="story-enter w-full max-w-[21rem] break-words text-xl font-semibold leading-snug tracking-normal min-[380px]:text-2xl sm:max-w-3xl sm:text-2xl md:text-3xl"
+            style={{ "--story-delay": "160ms" } as StoryStyle}
+            initial={false}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={
+              shouldReduceMotion
+                ? { opacity: 0 }
+                : { opacity: 0, y: -12, filter: "blur(8px)" }
+            }
+            transition={
+              shouldReduceMotion
+                ? { duration: 0 }
+                : { duration: 0.45, ease: entranceEase }
+            }
+          >
+            {storySlides[currentSlide]}
+          </motion.p>
         </AnimatePresence>
+      </div>
+
+      <div
+        className="story-enter pointer-events-none absolute inset-x-5 bottom-10 flex flex-col items-center gap-3 text-center text-sm font-medium text-brand-blue/58 sm:bottom-8 sm:gap-4"
+        style={{ "--story-delay": "260ms" } as StoryStyle}
+      >
+        <span>Tocca per continuare</span>
+        <div className="flex items-center gap-2">
+          {storySlides.map((slide, index) => (
+            <span
+              key={slide}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                index === currentSlide
+                  ? "w-8 bg-brand-blue"
+                  : "w-1.5 bg-brand-blue/20"
+              }`}
+            />
+          ))}
+        </div>
       </div>
 
       {isReturningHome && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowRight, UsersRound } from "lucide-react";
@@ -15,6 +15,10 @@ import { Button } from "@/components/ui/button";
 const titleLetters = "LEONARDO".split("");
 const entranceEase = [0.16, 1, 0.3, 1] as const;
 const waveEase = [0.76, 0, 0.24, 1] as const;
+
+type IntroStyle = CSSProperties & {
+  "--hero-delay"?: string;
+};
 
 function WhiteWave({
   onComplete,
@@ -46,6 +50,7 @@ function WhiteWave({
 export function HomeHero() {
   const router = useRouter();
   const shouldReduceMotion = useReducedMotion();
+  const [hasIntroStarted, setHasIntroStarted] = useState(false);
   const [isOpeningPresentation, setIsOpeningPresentation] = useState(false);
 
   const fastTransition: Transition = shouldReduceMotion
@@ -58,6 +63,14 @@ export function HomeHero() {
     }
   }, [router]);
 
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      setHasIntroStarted(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
   const startPresentation = () => {
     setIsOpeningPresentation(true);
   };
@@ -65,7 +78,9 @@ export function HomeHero() {
   return (
     <section
       id="home"
-      className="relative isolate grid min-h-[100svh] place-items-center overflow-hidden bg-brand-blue"
+      className={`hero-intro relative isolate grid min-h-[100svh] place-items-center overflow-hidden bg-brand-blue ${
+        hasIntroStarted ? "hero-intro-ready" : ""
+      }`}
     >
       <motion.div
         aria-hidden="true"
@@ -86,7 +101,10 @@ export function HomeHero() {
             : { delay: 0.35, duration: 1.1, ease: entranceEase }
         }
       >
-        <div className="relative aspect-square h-[78svh] w-[78svh] max-w-none -translate-x-[18%] md:h-[118vmin] md:w-[118vmin] md:-translate-x-[50vw] lg:h-[122vmin] lg:w-[122vmin] lg:-translate-x-[46vw]">
+        <div
+          className="hero-logo-enter relative aspect-square h-[78svh] w-[78svh] max-w-none -translate-x-[18%] md:h-[118vmin] md:w-[118vmin] md:-translate-x-[50vw] lg:h-[122vmin] lg:w-[122vmin] lg:-translate-x-[46vw]"
+          style={{ "--hero-delay": "80ms" } as IntroStyle}
+        >
           <Image
             src="/logo_leonardo.png"
             alt=""
@@ -107,6 +125,10 @@ export function HomeHero() {
             <motion.span
               aria-hidden="true"
               key={`${letter}-${index}`}
+              className="hero-enter"
+              style={
+                { "--hero-delay": `${180 + index * 45}ms` } as IntroStyle
+              }
               initial={false}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={
@@ -125,7 +147,8 @@ export function HomeHero() {
         </h1>
 
         <motion.p
-          className="mt-5 max-w-2xl text-base leading-7 text-white/78 sm:mt-6 sm:text-lg"
+          className="hero-enter mt-5 max-w-2xl text-base leading-7 text-white/78 sm:mt-6 sm:text-lg"
+          style={{ "--hero-delay": "640ms" } as IntroStyle}
           initial={false}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={
@@ -138,7 +161,8 @@ export function HomeHero() {
         </motion.p>
 
         <motion.div
-          className="mt-7 flex w-full items-center justify-center gap-2 sm:mt-8 sm:w-auto sm:gap-3"
+          className="hero-enter mt-7 flex w-full items-center justify-center gap-2 sm:mt-8 sm:w-auto sm:gap-3"
+          style={{ "--hero-delay": "800ms" } as IntroStyle}
           initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={

@@ -114,8 +114,6 @@ export default function Home() {
             <CircularGallery
               bend={1}
               borderRadius={0.05}
-              scrollSpeed={2}
-              scrollEase={0.05}
               textColor="#ffffff"
             />
           </div>
